@@ -1,0 +1,21 @@
+{
+  "name": "alexa-greet-my-friend",
+  "version": "1.0.0",
+  "description": "An alexa skill to have a conversation to greet you friend.",
+  "main": "index.js",
+  "dependencies": {
+    "ask-sdk-model": "^1.5.0",
+    "ask-sdk": "^2.0.9",
+    "ask-sdk-core": "^2.0.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "alexa",
+    "nodejs"
+  ],
+  "author": "Mohd Ashif Ali",
+  "license": "ISC"
+}
