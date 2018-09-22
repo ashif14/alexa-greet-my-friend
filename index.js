@@ -55,7 +55,7 @@ const CompletedGreetMyFriendHandler = {
     const filledSlots = handlerInput.requestEnvelope.request.intent.slots;
     const slotValues = getSlotValues(filledSlots);
 
-    let speechOutput = getRandomPhrase(completeskillOutput);
+    let speechOutput = getRandomPhrase(greetMessageIntro);
 
     if(slotValues.friendName) {
       speechOutput += slotValues.friendName;
