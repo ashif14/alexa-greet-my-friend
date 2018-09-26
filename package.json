@@ -4,9 +4,10 @@
   "description": "An alexa skill to have a conversation to greet you friend.",
   "main": "index.js",
   "dependencies": {
-    "ask-sdk-model": "^1.5.0",
     "ask-sdk": "^2.0.9",
-    "ask-sdk-core": "^2.0.9"
+    "ask-sdk-core": "^2.0.9",
+    "ask-sdk-model": "^1.5.0",
+    "horoscope": "^2.0.1"
   },
   "devDependencies": {},
   "scripts": {

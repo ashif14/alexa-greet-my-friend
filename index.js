@@ -1,8 +1,11 @@
 
 const Alexa = require('ask-sdk-core')
+const horoscope = require('horoscope')
+const https = require('http');
+const url = require('url');
 
 // Welcome message
-const welcomeOutput =  "Welcome to Alexa Greeter Skill, what is you friend's name?";
+const welcomeOutput =  "Welcome to Alexa Greeter Skill. It's a great day you know, and I am glad you came to meet me.";
 
 const greetMessageIntro = [
   'Nice to meet you ',
@@ -11,7 +14,7 @@ const greetMessageIntro = [
 // Launch request handler
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
-    return handlerInput.requestEnveloper.request.type === 'LaunchRequest';
+    return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
   },
   handle(handlerInput){
     const responseBuilder = handlerInput.responseBuilder;
@@ -19,7 +22,6 @@ const LaunchRequestHandler = {
 
     return responseBuilder
       .speak(welcomeOutput)
-      .repromt(welcomeOutput)
       .getResponse();
   }
 };
@@ -29,9 +31,9 @@ const InProgressGreetMyFriendHandler = {
   canHandle(handlerInput) {
     const request = handlerInput.requestEnvelope.request;
 
-    return request.type === 'IntentRequest' &&
-      request.intent.name === 'GreetMyFriend' &&
-      request.dialogState !== 'COMPLETED';
+    return request.type == 'IntentRequest' &&
+      request.intent.name == 'GreetMyFriend' &&
+      request.dialogState != 'COMPLETED';
   },
   handle(handlerInput) {
     const currentIntent = handlerInput.requestEnvelope.request.intent;
@@ -42,30 +44,66 @@ const InProgressGreetMyFriendHandler = {
   }
 };
 
+function httpGet(horoscopeSign) {
+  return new Promise( (resolve, reject) => {
+
+    const options = url.parse('http://horoscope-api.herokuapp.com/horoscope/today/'+horoscopeSign);
+    const request = https.request(options, (response) => {
+      response.setEncoding('utf8');
+      let returnData = '';
+
+      response.on('data', (chunk) => {
+        returnData += chunk;
+      });
+
+      response.on('end', () => {
+        resolve(JSON.parse(returnData));
+      });
+    });
+    request.end();
+  });
+}
 const CompletedGreetMyFriendHandler = {
   canHandle(handlerInput) {
     const request = handlerInput.requestEnvelope.request;
     return request.type == 'IntentRequest' && request.intent.name === 'GreetMyFriend';
   },
-  handle(handlerInput) {
+  async handle(handlerInput) {
     console.log('Greet My Friend - handle');
 
     const responseBuilder = handlerInput.responseBuilder;
 
     const filledSlots = handlerInput.requestEnvelope.request.intent.slots;
     const slotValues = getSlotValues(filledSlots);
+    // const slotValues = JSON.stringify(filledSlots);
 
     let speechOutput = getRandomPhrase(greetMessageIntro);
 
     if(slotValues.friendName) {
-      speechOutput += slotValues.friendName;
+      speechOutput += slotValues.friendName.synonym;
     }
 
+    if(slotValues.dateOfBirth) {
+
+      const splitDate = slotValues.dateOfBirth.synonym.toString().split('-');
+
+      const horoscopeSign = horoscope.getSign({month: parseInt(splitDate[1],10), day: parseInt(splitDate[2],10)});
+
+      const apiResponse = await httpGet(horoscopeSign);
+
+      console.log(apiResponse.horoscope);
+
+      return responseBuilder
+        .speak(speechOutput+ ' I have something to say about your day today. '+apiResponse.horoscope)
+        .getResponse();
+    } else {
     return responseBuilder
       .speak(speechOutput)
       .getResponse();
+    }
   }
 };
+
 
 //
 const HelpIntentHandler = {
@@ -131,7 +169,11 @@ function getSlotValues(filledSlots) {
     const slotValues = {};
 
     console.log(`The filled slots: ${JSON.stringify(filledSlots)}`);
-    Object.keys(filledSlots).forEach(item) => {
+
+    // filledSlots.map()
+
+    for(let item in filledSlots) {
+    // Object.keys(filledSlots).forEach(item) => {
       const name = filledSlots[item].name;
 
       if(filledSlots[item] &&
@@ -164,7 +206,8 @@ function getSlotValues(filledSlots) {
             isValidated: false,
           };
         }
-    }, this);
+      }
+    // }, this);
     return slotValues;
 }
 
