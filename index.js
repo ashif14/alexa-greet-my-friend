@@ -95,7 +95,7 @@ const CompletedGreetMyFriendHandler = {
       console.log(apiResponse.horoscope);
 
       return responseBuilder
-        .speak(speechOutput+ '. I have something to say about your day today. '+apiResponse.horoscope)
+        .speak(speechOutput+ ' I have something to say about your day today. '+apiResponse.horoscope)
         .getResponse();
     } else {
     return responseBuilder
