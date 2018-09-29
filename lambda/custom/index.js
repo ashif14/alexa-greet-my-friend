@@ -21,7 +21,7 @@ const LaunchRequestHandler = {
 
 
     return responseBuilder
-      .speak('Hello World!')
+      .speak(welcomeOutput)
       .getResponse();
   }
 };

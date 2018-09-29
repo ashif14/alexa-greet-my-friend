@@ -8,32 +8,40 @@ Run with 'mocha examples/skill-sample-nodejs-hello-world/helloworld-tests.js'.
 const alexaTest = require('alexa-skill-test-framework');
 // const alexaTest = require('../../index');
 
+alexaTest.setLocale('en-IN');
 // initialize the testing framework
 alexaTest.initialize(
 	require('../lambda/custom/index.js'),
 	"amzn1.ask.skill.00000000-0000-0000-0000-000000000000",
 	"amzn1.ask.account.VOID");
 
-describe("Hello World Skill", function () {
+describe("Greeter Skill", function () {
 	// tests the behavior of the skill's LaunchRequest
 	describe("LaunchRequest", function () {
 		alexaTest.test([
 			{
 				request: alexaTest.getLaunchRequest(),
-				says: "Hello World!", repromptsNothing: true, shouldEndSession: true
+				says: "Welcome to Alexa Greeter Skill. It's a great day you know, and I am glad you came to meet me.", repromptsNothing: true, shouldEndSession: true
 			}
 		]);
 	});
 
 	// tests the behavior of the skill's HelloWorldIntent
-	describe("GreetMyFriend", function () {
+	describe("CompletedGreetMyFriendHandler", function () {
+
+		let request = alexaTest.getIntentRequest("CompletedGreetMyFriendHandler", {
+			dateOfBirth: '1994-06-17'
+		});
+
+		request = alexaTest.addEntityResolutionsToRequest(request, 'dateOfBirth','AMAZON.DATE', '1994-06-17');
+
 		alexaTest.test([
 			{
-				request: alexaTest.getIntentRequest("GreetMyFriend"),
+				request: request,
 				says: "Hello World!", repromptsNothing: true, shouldEndSession: true,
-				hasAttributes: {
-					activity: 'eating'
-				}
+				// hasAttributes: {
+				// 	activity: 'eating'
+				// }
 			}
 		]);
 	});
