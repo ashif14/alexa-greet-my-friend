@@ -1,0 +1,32 @@
+User: Alexa let's play truth and dare.
+Alexa: Okay, let's play. How many players are we playing ??
+User: 3
+Alexa: Okay, tell me name of three players??
+User: Ashif, Ashwini, Abhishek
+Alexa: Okay, let's spin bottle.
+Alexa: bottle sound
+Alexa: player 1 turn, truth or dare ??
+Player1: truth
+Alexa: Okay player 2 ask a question ??
+Player2: will ask a question.
+Player1: will answer a question.
+User: Alexa, Spin bottle
+Alexa: Player 2 turn, truth or dare ??
+Player2: Dare
+Alexa: Player3 give a dare
+Player3: will give a dare
+Alexa: ohh, that is a dare :D :D Are you gonna do it ??
+Player2: yes/no
+
+-- if yes --
+Alexa: Okay let's do it.
+Player2: Will do dare
+User: Alexa, sping bottle
+
+
+
+-- if no --
+Alexa: Okay, do want truth or want to pass on ??
+-- if truth
+Alexa: player3, ask a question ??
+Player3: will ask a question.
