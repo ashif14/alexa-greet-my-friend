@@ -67,7 +67,8 @@ function httpGet(horoscopeSign) {
 const CompletedGreetMyFriendHandler = {
   canHandle(handlerInput) {
     const request = handlerInput.requestEnvelope.request;
-    return request.type == 'IntentRequest' && request.intent.name === 'GreetMyFriend';
+    return request.type == 'IntentRequest'
+      && request.intent.name === 'GreetMyFriend';
   },
   async handle(handlerInput) {
     console.log('Greet My Friend - handle');
